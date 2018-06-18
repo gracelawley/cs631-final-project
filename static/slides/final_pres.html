@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentiment Analysis of a CHILDES corpus</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Grace Lawley" />
+    <link href="final_pres_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="final_pres_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="final_pres_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Sentiment Analysis of a CHILDES corpus
+## CS631: Final Presentation
+### Grace Lawley
+### June 18th, 2018
+
+---
+
+
+# The Dataset
+--
+
+* Child Language Data Exchange System (CHILDES)  
+
+  + Online repository of language acquisition data
+  
+--
+
+* CHILDES → Eng-NA → **Kuczaj Corpus**
+
+  + Longitudional Case Study
+  
+  + 1 target child: Abe
+  
+  + ~2 - ~5 years old
+  
+  + 210 transcripts (average of 810 words long)
+  
+---
+
+# Getting the Raw Data
+--
+
+* Pulled raw utterances data down from the CHILDES database with the `childesr` package
+
+--
+
+* Column names of the raw dataframe:
+
+```
+##  [1] "id"                "speaker_id"        "utterance_order"  
+##  [4] "transcript_id"     "corpus_id"         "gloss"            
+##  [7] "num_tokens"        "stem"              "part_of_speech"   
+## [10] "speaker_code"      "speaker_name"      "speaker_role"     
+## [13] "target_child_id"   "target_child_age"  "target_child_name"
+## [16] "target_child_sex"  "type"              "media_end"        
+## [19] "media_start"       "media_unit"        "collection_id"    
+## [22] "collection_name"   "num_morphemes"     "language"         
+## [25] "corpus_name"
+```
+--
+
+* Some raw utterances:
+
+```
+## [1] "okay that's a alligator he got a cigar"
+## [2] "go away"                               
+## [3] "camel pig and the donkey"              
+## [4] "you go away"                           
+## [5] "uhhuh eat"                             
+## [6] "oh no"
+```
+---
+
+# Cleaning &amp; Processing the Data
+--
+
+* Used only the `gloss` (utterances) and `target_child_age` (age in months) columns
+
+--
+
+* Expanded or collapsed contractions, e.g.:
+  + "wont" → "will not"
+  + "can't" → "can not"
+  + "'d" → " would"
+  
+--
+
+* Changed all characters to lowercase
+
+--
+
+* Converted age from months to years
+
+--
+
+* Tokenized into unigrams with `tidytext:unnest_tokens()`
+
+---
+
+# Sentiment Analysis
+--
+
+* Used the `nrc` sentiment lexicon from the `tidytext` package
+
+--
+
+  + Classifies words into 10 different sentiment categories: **anger**, **disgust**, **fear**, **joy**, **negative**, **positive**, **sadness**, **surprise**, and **trust**
+
+--
+
+* Merged with tokens with `dplyr::inner_merge()` 
+
+--
+
+  + Only kept tokens that occured in both dataframes
+
+---
+
+# The Plot
+--
+
+* Visualize trends for 6 sentiments over time
+
+--
+
+* **Positive = ** *trust*, *joy*, *anticipation*  
+--
+
+* **Negative = ** *sadness*, *fear*, *anger*
+
+---
+# The Plot
+![](final_plot.png)&lt;!-- --&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

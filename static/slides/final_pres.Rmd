@@ -1,0 +1,122 @@
+---
+title: "Sentiment Analysis of a CHILDES corpus"
+subtitle: "CS631: Final Presentation"
+author: "Grace Lawley"
+date: "June 18th, 2018"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+# The Dataset
+--
+
+* Child Language Data Exchange System (CHILDES)  
+
+  + Online repository of language acquisition data
+  
+--
+
+* CHILDES → Eng-NA → **Kuczaj Corpus**
+
+  + Longitudional Case Study
+  
+  + 1 target child: Abe
+  
+  + ~2 - ~5 years old
+  
+  + 210 transcripts (average of 810 words long)
+  
+---
+
+# Getting the Raw Data
+--
+
+* Pulled raw utterances data down from the CHILDES database with the `childesr` package
+
+--
+
+* Column names of the raw dataframe:
+```{r echo = FALSE, message = FALSE}
+library(readr)
+library(dplyr)
+
+kuczaj_raw <- read_csv("kuczaj_raw.csv")
+names(kuczaj_raw)
+```
+--
+
+* Some raw utterances:
+```{r echo = FALSE}
+kuczaj_raw$gloss[78:83]
+```
+---
+
+# Cleaning & Processing the Data
+--
+
+* Used only the `gloss` (utterances) and `target_child_age` (age in months) columns
+
+--
+
+* Expanded or collapsed contractions, e.g.:
+  + "wont" → "will not"
+  + "can't" → "can not"
+  + "'d" → " would"
+  
+--
+
+* Changed all characters to lowercase
+
+--
+
+* Converted age from months to years
+
+--
+
+* Tokenized into unigrams with `tidytext:unnest_tokens()`
+
+---
+
+# Sentiment Analysis
+--
+
+* Used the `nrc` sentiment lexicon from the `tidytext` package
+
+--
+
+  + Classifies words into 10 different sentiment categories: **anger**, **disgust**, **fear**, **joy**, **negative**, **positive**, **sadness**, **surprise**, and **trust**
+
+--
+
+* Merged with tokens with `dplyr::inner_merge()` 
+
+--
+
+  + Only kept tokens that occured in both dataframes
+
+---
+
+# The Plot
+--
+
+* Visualize trends for 6 sentiments over time
+
+--
+
+* **Positive = ** *trust*, *joy*, *anticipation*  
+--
+
+* **Negative = ** *sadness*, *fear*, *anger*
+
+---
+# The Plot
+```{r echo = FALSE}
+knitr::include_graphics("final_plot.png")
+```
+
+
