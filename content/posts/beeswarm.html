@@ -1,0 +1,73 @@
+---
+title: "Beeswarm Plot"
+author: "Grace Lawley"
+date: "2018-05-15"
+output: html_document
+---
+
+
+
+<div id="plot-code" class="section level2">
+<h2>1. Plot &amp; Code</h2>
+<pre class="r"><code>library(gapminder)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(skimr)
+
+
+gapminder &lt;- gapminder %&gt;% 
+  filter(year == 2007 | year == 1952) %&gt;% 
+  group_by(year) %&gt;% 
+  mutate(ww_life_exp = mean(lifeExp))
+
+ggplot(gapminder, aes(continent, lifeExp)) +
+  geom_dotplot(stackdir = &#39;center&#39;,
+               binaxis = &#39;y&#39;,
+               binwidth = .5,
+               binpositions = &#39;all&#39;, 
+               stackratio = 1.5,
+               alpha = 0.6,
+               color = &#39;thistle&#39;) +
+  facet_wrap(~year) +
+  geom_hline(aes(yintercept = ww_life_exp),
+              linetype = 2) +
+  labs(x = &#39;Continent&#39;, y = &#39;Life Expectancy&#39;,
+       title = &#39;Life Expectancy Across Continents: 1952 &amp; 2007&#39;) +
+  theme_minimal()</code></pre>
+<p><img src="/posts/beeswarm_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="graph-type" class="section level2">
+<h2>2. Graph Type</h2>
+<p>A beeswarm is a type of one-dimensional scatter plot where points are even spaced apart, horizontally, to show the volume of points at a given y-value.</p>
+</div>
+<div id="data" class="section level2">
+<h2>3. Data</h2>
+<p>The data used to create this plot is from Jenny Bryan’s <code>gapminder</code> package. The dataset is actually an excerpt of the <a href="http://www.gapminder.org/data/">original Gapminder data</a>. This smaller dataset includes data for life expectancy, GDP (Gross domestic product) per capita, and population, for 142 countries of 5 continents between the years 1952 and 2007 (in increments of 5 years).</p>
+</div>
+<div id="audience" class="section level2">
+<h2>4. Audience</h2>
+<p>The potential audience of this graph might include a healthcare researcher that is studying life expectancy trends and changes in different continents.</p>
+</div>
+<div id="representation-description" class="section level2">
+<h2>5. Representation Description</h2>
+<p>I wanted to explore the life expectancies for each of the five continents included in the gapminder dataset. Since there are a tremendous amount of rows in the full dataset, I limited the plots to only the life expectancies reported in the earliest and latest year represented: 1952 and 2007. I chose a beeswarm plot so that the number of countries for a given continent and a given year that have the same life expectancy reported would be relatively easy to discern in the plots, which would in turn also make comparing the 1952 beeswarms and the 2007 beeswarms easier.</p>
+</div>
+<div id="how-to-read-it-what-to-look-for" class="section level2">
+<h2>6. How to Read it &amp; What to Look For</h2>
+<p>Since a beeswarm plot is intended to visualize the distribution of data for multiple categories, look for how the shape of the plot changes as the y-value changes, which y-values have the largest amount of points for a given category, and how the shapes of the plots are different or are similar to the other plots. Since this plot has two subplots, look for how the plots for each continent have changed from 1952 to 2007.</p>
+</div>
+<div id="presentation-tips" class="section level2">
+<h2>7. Presentation Tips</h2>
+<p><strong>Annotation:</strong> Including annotations that provide context and explanation for any outliers could be useful. Also, since the number of dots varies between continents, having annotation that explictly states the n values for each continent might be helpful.</p>
+<p><strong>Color:</strong> If there were more points plotted you could use color to distinguish which points fall above and which fall below the dashed line representing the ‘global mean life expectancy’.</p>
+<p><strong>General Composition:</strong> Instead of having the plots for the two years be separated, plotting the beeswarms with both years side by side for a given continent could make comparing the plots easier.</p>
+</div>
+<div id="variations-alternatives" class="section level2">
+<h2>8. Variations &amp; Alternatives</h2>
+<p>Another plot type that can be used to visualize the distribution of data is a strip chart. A strip chart is also a one-dimensional scatter plot. However, unlike a beeswarm plot, a strip chart allows points to overlap when they have the same y-value. Another plot type used to visualize the distribution of data is a box plot. Box plots are used to visualize the minimum, first quartile, median, third quartile, and maximum for a group or groups of data.</p>
+</div>
+<div id="methods" class="section level2">
+<h2>9. Methods</h2>
+<p>To create this visualization I first filtered the <code>gapminder</code> dataset so that it only included data for the years 1952 and 2007. I then added a column containing the average life expectancy across of the countries in the five continents for both 1952 and 2007. To create the points that make up the beeswarms I used <code>ggplot2::geom_dotplot</code> and used <code>facet_wrap()</code> to create subplots for the two years. I then added horizontal, dashed lines with <code>ggplot2::geom_hline</code> to mark the average ‘global’ life expectancy.</p>
+</div>

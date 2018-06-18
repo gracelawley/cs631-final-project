@@ -1,0 +1,64 @@
+---
+title: "Strip Chart"
+date: "2015-05-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Plot & Code
+```{r message=FALSE}
+library(gapminder)
+library(ggplot2)
+library(dplyr)
+
+options(scipen=999)
+
+gapminder <- gapminder %>% 
+  filter(year == 2007)
+
+ggplot(gapminder, aes(continent, gdpPercap)) +
+  geom_hline(aes(yintercept = median(gdpPercap)), 
+             linetype = 2) +
+  geom_jitter(width = 0.2, height = 0,
+              alpha = 0.6, color = 'darkolivegreen',
+              fill = 'darkolivegreen') +
+  labs(x = "Continent", y = "Per Capita GDP") +
+  ggtitle("GDP per Capita in 2007") +
+  theme_minimal() +
+  annotate(geom = 'text', x = .6, y = 7290, size = 2.5,
+           label = 'Global\nMedian', hjust = 0.5) +
+  scale_y_log10()
+```
+
+## 2. Graph Type
+A strip chart is a one-dimensional version of a scatter plot, where there is one continuous variable and one categorical variable. A scatter plot shows the relationship between two continuous variables on the Cartesian coordinate system. 
+
+## 3. Data 
+The data used to create this plot is from Jenny Bryan's `gapminder` package. The dataset is actually an excerpt of the [original Gapminder data](http://www.gapminder.org/data/). This smaller dataset includes data for life expectancy, GDP (Gross domestic product) per capita, and population, for 142 countries of 5 continents between the years 1952 and 2007 (in increments of 5 years).
+
+## 4. Audience
+The potential audience for this visualization might include students who are studying economic trends across continents.
+
+## 5. Representation Description
+This graph is intended to show the distribution of GDP per Capita in 2007 for each of the five continents included in the dataset. Each data point represents the GDP per Capita reported for one country in 2007. The dashed line included represents the 'Global Median' GDP per Capita in 2007, with 'global' meaning the entire dataset and not a true 'global' value. 
+
+## 6. How to Read it & What to Look For
+Since a strip chart is meant to be a visualization of the distribution of the data good things to look for include examining if the points are clustered together, if so, where those clusters are, and if there are any outliers. Additionally, since there are multiple categories in this plot, looking at how the strip charts differ from one another or are similar to each other is also important. 
+
+## 7. Presentation Tips
+__Annotation:__ Inclusion of summary statistics for the individual categories and/or for the group as a whole would add another layer of information to the visualization. If there are any outliers in the plot, including annotation that explains more about the background and context of the outlier would be useful. 
+
+__Color:__ If you wanted to overlay the five separate plots on top of one another instead of keeping them separate, color could be used to distinguish which points belong to which group.
+
+__General Composition:__ If there are a lot data points to plot using `geom_jitter` and adjusting the `alpha` level could increase the plot's readability.
+
+## 8. Variations & Alternatives
+Other plot types that can be used to visualize the distribution of data include box plots and beeswarm plots. Box plots are used to visualize the minimum, first quartile, median, third quartile, and maximum for a group or groups of data. A beeswarm plot is a variation of a strip chart where instead of points overlapping when they have the same y-value, the points are plotted next to one another. 
+
+## 9. Methods
+To create this plot I filtered the `gapminder` dataset to only include data for the year 2007. After turning scientific notation off, I used `geom_jitter` to plot the GDP per Capita values for each country grouped by continent. I additionally included a dashed line by using `geom_hline`, that represents the median GDP per Capita value across all countries for all five continents in the year 2007. 
+
+

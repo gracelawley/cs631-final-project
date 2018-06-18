@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Grace Lawley</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Grace Lawley</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 18 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Line Graph</title>
+      <link>/posts/line-graph/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/line-graph/</guid>
+      <description>1. Plot &amp;amp; Code library(tidyverse) library(babynames) library(knitr) top &amp;lt;- c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;) # filtering out all but top three top_names &amp;lt;- babynames %&amp;gt;% filter(sex == &amp;#39;F&amp;#39;, name %in% top) ggplot(top_names, aes(year, prop, color=name)) + geom_line(aes(lty = name), lwd=.75) + scale_linetype_discrete(breaks = NULL) + scale_color_grey(start = .3, end = 1, breaks = c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;), name = NULL) + labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Proportion&amp;quot;, title = &amp;#39;The Decline of Mary, Anna, and Emma&amp;#39;, subtitle = &amp;#39;The popularity of the top 3 girl names of 1880 over the years&amp;#39;)  2.</description>
+    </item>
+    
+    <item>
+      <title>Beeswarm Plot</title>
+      <link>/posts/beeswarm/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/beeswarm/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) library(knitr) library(skimr) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007 | year == 1952) %&amp;gt;% group_by(year) %&amp;gt;% mutate(ww_life_exp = mean(lifeExp)) ggplot(gapminder, aes(continent, lifeExp)) + geom_dotplot(stackdir = &amp;#39;center&amp;#39;, binaxis = &amp;#39;y&amp;#39;, binwidth = .5, binpositions = &amp;#39;all&amp;#39;, stackratio = 1.5, alpha = 0.6, color = &amp;#39;thistle&amp;#39;) + facet_wrap(~year) + geom_hline(aes(yintercept = ww_life_exp), linetype = 2) + labs(x = &amp;#39;Continent&amp;#39;, y = &amp;#39;Life Expectancy&amp;#39;, title = &amp;#39;Life Expectancy Across Continents: 1952 &amp;amp; 2007&amp;#39;) + theme_minimal()  2.</description>
+    </item>
+    
+    <item>
+      <title>Kernel Density Plot</title>
+      <link>/posts/kernel-density-plot/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/kernel-density-plot/</guid>
+      <description>1. Plot &amp;amp; R Code library(tidyverse) library(readr) library(ggthemes) moma &amp;lt;- read_csv(&amp;quot;http://bit.ly/cs631-moma&amp;quot;) moma_year &amp;lt;- moma %&amp;gt;% mutate(acq_yr_vs_death_yr = case_when( year_acquired &amp;lt; artist_death_year ~ &amp;quot;before artist&amp;#39;s death, \nand artist has since died&amp;quot;, year_acquired &amp;gt; artist_death_year ~ &amp;quot;after artist&amp;#39;s death&amp;quot;, year_acquired == artist_death_year ~ &amp;quot;same year as artist&amp;#39;s death&amp;quot;, is.na(artist_death_year) == TRUE ~ &amp;quot;before artist&amp;#39;s death,\nbut artist is still alive&amp;quot;)) %&amp;gt;% drop_na(acq_yr_vs_death_yr) ggplot(moma_year, aes(year_acquired)) + geom_density(fill = &amp;#39;thistle3&amp;#39;, alpha = .5, na.rm = TRUE) + facet_wrap(~acq_yr_vs_death_yr) + labs(x = &amp;quot;Year Acquired&amp;quot;, y = &amp;quot;Density&amp;quot;, subtitle = &amp;quot;Year of Artist&amp;#39;s Death vs.</description>
+    </item>
+    
+    <item>
+      <title>Strip Chart</title>
+      <link>/posts/strip-chart/</link>
+      <pubDate>Fri, 01 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/strip-chart/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) options(scipen=999) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007) ggplot(gapminder, aes(continent, gdpPercap)) + geom_hline(aes(yintercept = median(gdpPercap)), linetype = 2) + geom_jitter(width = 0.2, height = 0, alpha = 0.6, color = &amp;#39;darkolivegreen&amp;#39;, fill = &amp;#39;darkolivegreen&amp;#39;) + labs(x = &amp;quot;Continent&amp;quot;, y = &amp;quot;Per Capita GDP&amp;quot;) + ggtitle(&amp;quot;GDP per Capita in 2007&amp;quot;) + theme_minimal() + annotate(geom = &amp;#39;text&amp;#39;, x = .6, y = 7290, size = 2.</description>
+    </item>
+    
+  </channel>
+</rss>

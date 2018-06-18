@@ -1,0 +1,107 @@
+---
+title: "Line Graph"
+date: "2018-05-18"
+output: html_document
+---
+
+
+
+<div id="plot-code" class="section level2">
+<h2>1. Plot &amp; Code</h2>
+<pre class="r"><code>library(tidyverse)
+library(babynames)
+library(knitr)
+
+top &lt;- c(&#39;Mary&#39;, &#39;Anna&#39;, &#39;Emma&#39;)
+
+# filtering out all but top three
+top_names &lt;- babynames %&gt;% 
+  filter(sex == &#39;F&#39;, name %in% top)
+
+ggplot(top_names, aes(year, prop, color=name)) +
+  geom_line(aes(lty = name), 
+            lwd=.75) +
+  scale_linetype_discrete(breaks = NULL) +
+  scale_color_grey(start = .3, end = 1,
+                   breaks = c(&#39;Mary&#39;, &#39;Anna&#39;, &#39;Emma&#39;),
+                   name = NULL) +
+  labs(x = &quot;Year&quot;, y = &quot;Proportion&quot;,
+       title = &#39;The Decline of Mary, Anna, and Emma&#39;,
+       subtitle = &#39;The popularity of the top 3 girl names of 1880 over the years&#39;)</code></pre>
+<p><img src="/posts/line-graph_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="graph-type" class="section level2">
+<h2>2. Graph Type</h2>
+<p>Line graphs are used to visualize how one variable changes in relation to another variable. The latter variable is typically one that represents a unit of time.</p>
+</div>
+<div id="data" class="section level2">
+<h2>3. Data</h2>
+<p>The data used in this plot is from the <code>babynames</code> package. The dataset was originally provided by the US Social Security Administration and includes data for female and male baby names with at least 5 uses between 1880 and 2015. The variables in the dataset are <code>year</code>, <code>sex</code>, <code>name</code>, <code>n</code>, and <code>prop</code>, where <code>n</code> is the number of babies and <code>prop</code> is the proportion of male or female babies of a particular name for a given year.</p>
+</div>
+<div id="audience" class="section level2">
+<h2>4. Audience</h2>
+<p>The audience for this plot could be expecting parents that are trying to choose a baby name and are including the popularity of the name over the years as an important factor in their decision process.</p>
+</div>
+<div id="representation-description" class="section level2">
+<h2>5. Representation Description</h2>
+<p>I wanted to create a visualization that showed how the popularity of the three most popularity female names in 1880 changed over the years. After filtering the dataset and learning that ‘Mary’, ‘Anna’, and ‘Emma’ were the top three female names in 1880, I was anticipating their popularity to decline at first, then increase around 1990-2000, and then decline again after that. This hypothesis was mainly driven by the fact that most of the people I know named ‘Mary’, ‘Anna’, and ‘Emma’, are around the same age as I am and thus born somewhere around 1990-2000. The prediction of a decline in popularity after 2000 was mostly because of the recent trend of parents giving their babies less mainstream and more unique names.</p>
+<p>Since this was originally just meant to be a brief exploratory plot, I decided to make a simple line graph to quickly see how the popularity changed over time. The three lines are color coded for each name and are have the additional distinguishing feature of being of different <code>linetypes</code>.</p>
+</div>
+<div id="how-to-read-it-what-to-look-for" class="section level2">
+<h2>6. How to Read it &amp; What to Look For</h2>
+<p>Since a line graph is typically used to track changes of a variable over time, look for any steep declines or increases of the lines. Also look at how these changes relate between the lines, for things such as if the hierarchy of the lines switch around.</p>
+</div>
+<div id="presentation-tips" class="section level2">
+<h2>7. Presentation Tips</h2>
+<p><strong>Annotation:</strong> For line graphs that show how a variable changes over time, including annotations that provide an explanation for a drastic and sudden peak of the line by giving some context and background can help enhance the graph and increase its effectiveness.</p>
+<p><strong>Color:</strong> Using color to distinguish between different lines in a line graph can be extremely useful, especially if there are many lines included in the plot.</p>
+<p><strong>General Composition:</strong> Though having the x-value be a variable of time is how line graphs are most often used, other continuous variables that could be used instead are temperature, altitude, or decibels.</p>
+</div>
+<div id="variations-alternatives" class="section level2">
+<h2>8. Variations &amp; Alternatives</h2>
+<p>Other plot types that can be used to visualize how a variable changes over time include scatterplots and bar plots. Scatterplots can be useful if you have many data points or multiple data points for a given unit of time and have a dense unit of time, such as days. Bar plots can be useful for the exact opposite: when you only have one data point for a given time unit and have a less dense unit of time, such as years.</p>
+</div>
+<div id="methods" class="section level2">
+<h2>9. Methods</h2>
+<p>To create this plot I first filtered the dataset to find the top three female names in 1880: Mary, Anna, and Emma.</p>
+<pre class="r"><code># top three names in 1880 by prop
+babynames %&gt;%
+  filter(sex == &#39;F&#39;, year == min(year)) %&gt;% 
+  top_n(3, prop) %&gt;%
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="left">sex</th>
+<th align="left">name</th>
+<th align="right">n</th>
+<th align="right">prop</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1880</td>
+<td align="left">F</td>
+<td align="left">Mary</td>
+<td align="right">7065</td>
+<td align="right">0.0723843</td>
+</tr>
+<tr class="even">
+<td align="right">1880</td>
+<td align="left">F</td>
+<td align="left">Anna</td>
+<td align="right">2604</td>
+<td align="right">0.0266792</td>
+</tr>
+<tr class="odd">
+<td align="right">1880</td>
+<td align="left">F</td>
+<td align="left">Emma</td>
+<td align="right">2003</td>
+<td align="right">0.0205217</td>
+</tr>
+</tbody>
+</table>
+<p>I then made another version of the dataset that only contained data for these three female names. To visualize how the popularity (measured by <code>prop</code>), for the three names changed over the years between 1880 and 2015 I used <code>ggplot2::geom_line</code> to create a simple line plot. I changed the line type and colors of the three lines to help distinguish them from one another.</p>
+</div>

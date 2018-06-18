@@ -17,8 +17,35 @@
       <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>My name is Grace Lawley. I am a first-year PhD student in the Computer Science &amp;amp; Electrical Engineering (CSEE) program of the Center for Spoken Language Understanding (CSLU) at Oregon Health &amp;amp; Science University (OHSU) in Portland, Oregon.
+      <description>Hi! My name is Grace Lawley. I am a first-year PhD student in the Computer Science &amp;amp; Electrical Engineering (CSEE) program of the Center for Spoken Language Understanding (CSLU) at Oregon Health &amp;amp; Science University (OHSU) in Portland, Oregon.
 I graduated from Lewis &amp;amp; Clark College in May of 2017 with a BA in Mathematics. My interests include math (&amp;hellip;surprise! more specifically, discrete math), data science, computational linguistics, autism spectrum disorder, and the programming language R.</description>
+    </item>
+    
+    <item>
+      <title>Line Graph</title>
+      <link>/posts/line-graph/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/line-graph/</guid>
+      <description>1. Plot &amp;amp; Code library(tidyverse) library(babynames) library(knitr) top &amp;lt;- c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;) # filtering out all but top three top_names &amp;lt;- babynames %&amp;gt;% filter(sex == &amp;#39;F&amp;#39;, name %in% top) ggplot(top_names, aes(year, prop, color=name)) + geom_line(aes(lty = name), lwd=.75) + scale_linetype_discrete(breaks = NULL) + scale_color_grey(start = .3, end = 1, breaks = c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;), name = NULL) + labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Proportion&amp;quot;, title = &amp;#39;The Decline of Mary, Anna, and Emma&amp;#39;, subtitle = &amp;#39;The popularity of the top 3 girl names of 1880 over the years&amp;#39;)  2.</description>
+    </item>
+    
+    <item>
+      <title>Beeswarm Plot</title>
+      <link>/posts/beeswarm/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/beeswarm/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) library(knitr) library(skimr) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007 | year == 1952) %&amp;gt;% group_by(year) %&amp;gt;% mutate(ww_life_exp = mean(lifeExp)) ggplot(gapminder, aes(continent, lifeExp)) + geom_dotplot(stackdir = &amp;#39;center&amp;#39;, binaxis = &amp;#39;y&amp;#39;, binwidth = .5, binpositions = &amp;#39;all&amp;#39;, stackratio = 1.5, alpha = 0.6, color = &amp;#39;thistle&amp;#39;) + facet_wrap(~year) + geom_hline(aes(yintercept = ww_life_exp), linetype = 2) + labs(x = &amp;#39;Continent&amp;#39;, y = &amp;#39;Life Expectancy&amp;#39;, title = &amp;#39;Life Expectancy Across Continents: 1952 &amp;amp; 2007&amp;#39;) + theme_minimal()  2.</description>
+    </item>
+    
+    <item>
+      <title>Kernel Density Plot</title>
+      <link>/posts/kernel-density-plot/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/kernel-density-plot/</guid>
+      <description>1. Plot &amp;amp; R Code library(tidyverse) library(readr) library(ggthemes) moma &amp;lt;- read_csv(&amp;quot;http://bit.ly/cs631-moma&amp;quot;) moma_year &amp;lt;- moma %&amp;gt;% mutate(acq_yr_vs_death_yr = case_when( year_acquired &amp;lt; artist_death_year ~ &amp;quot;before artist&amp;#39;s death, \nand artist has since died&amp;quot;, year_acquired &amp;gt; artist_death_year ~ &amp;quot;after artist&amp;#39;s death&amp;quot;, year_acquired == artist_death_year ~ &amp;quot;same year as artist&amp;#39;s death&amp;quot;, is.na(artist_death_year) == TRUE ~ &amp;quot;before artist&amp;#39;s death,\nbut artist is still alive&amp;quot;)) %&amp;gt;% drop_na(acq_yr_vs_death_yr) ggplot(moma_year, aes(year_acquired)) + geom_density(fill = &amp;#39;thistle3&amp;#39;, alpha = .5, na.rm = TRUE) + facet_wrap(~acq_yr_vs_death_yr) + labs(x = &amp;quot;Year Acquired&amp;quot;, y = &amp;quot;Density&amp;quot;, subtitle = &amp;quot;Year of Artist&amp;#39;s Death vs.</description>
     </item>
     
     <item>
@@ -43,10 +70,10 @@ I graduated from Lewis &amp;amp; Clark College in May of 2017 with a BA in Mathe
     
     <item>
       <title>Projects</title>
-      <link>/projects/projects/</link>
+      <link>/projects/final/</link>
       <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>/projects/projects/</guid>
+      <guid>/projects/final/</guid>
       <description>In this theme, it is possible to add sections like a Projects one for example. You can add plenty of articles about your projects and a presentation page that will be displayed before the list. All is modulable, if you don&amp;rsquo;t want something.
 A Hollywood-funded film version, produced and filmed in the UK, was released in April 2005, and radio adaptations of the third, fourth, and fifth novels were broadcast from 2004 to 2005.</description>
     </item>
@@ -60,6 +87,15 @@ A Hollywood-funded film version, produced and filmed in the UK, was released in 
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Strip Chart</title>
+      <link>/posts/strip-chart/</link>
+      <pubDate>Fri, 01 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/strip-chart/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) options(scipen=999) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007) ggplot(gapminder, aes(continent, gdpPercap)) + geom_hline(aes(yintercept = median(gdpPercap)), linetype = 2) + geom_jitter(width = 0.2, height = 0, alpha = 0.6, color = &amp;#39;darkolivegreen&amp;#39;, fill = &amp;#39;darkolivegreen&amp;#39;) + labs(x = &amp;quot;Continent&amp;quot;, y = &amp;quot;Per Capita GDP&amp;quot;) + ggtitle(&amp;quot;GDP per Capita in 2007&amp;quot;) + theme_minimal() + annotate(geom = &amp;#39;text&amp;#39;, x = .6, y = 7290, size = 2.</description>
     </item>
     
     <item>

@@ -1,0 +1,73 @@
+---
+title: "Line Graph"
+date: "2018-05-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Plot & Code
+```{r message=FALSE}
+library(tidyverse)
+library(babynames)
+library(knitr)
+
+top <- c('Mary', 'Anna', 'Emma')
+
+# filtering out all but top three
+top_names <- babynames %>% 
+  filter(sex == 'F', name %in% top)
+
+ggplot(top_names, aes(year, prop, color=name)) +
+  geom_line(aes(lty = name), 
+            lwd=.75) +
+  scale_linetype_discrete(breaks = NULL) +
+  scale_color_grey(start = .3, end = 1,
+                   breaks = c('Mary', 'Anna', 'Emma'),
+                   name = NULL) +
+  labs(x = "Year", y = "Proportion",
+       title = 'The Decline of Mary, Anna, and Emma',
+       subtitle = 'The popularity of the top 3 girl names of 1880 over the years')
+```
+
+## 2. Graph Type
+Line graphs are used to visualize how one variable changes in relation to another variable. The latter variable is typically one that represents a unit of time. 
+
+## 3. Data 
+The data used in this plot is from the `babynames` package. The dataset was originally provided by the US Social Security Administration and includes data for female and male baby names with at least 5 uses between 1880 and 2015. The variables in the dataset are `year`, `sex`, `name`, `n`, and `prop`, where `n` is the number of babies and `prop` is the proportion of male or female babies of a particular name for a given year.
+
+## 4. Audience
+The audience for this plot could be expecting parents that are trying to choose a baby name and are including the popularity of the name over the years as an important factor in their decision process.
+
+## 5. Representation Description
+I wanted to create a visualization that showed how the popularity of the three most popularity female names in 1880 changed over the years. After filtering the dataset and learning that 'Mary', 'Anna', and 'Emma' were the top three female names in 1880, I was anticipating their popularity to decline at first, then increase around 1990-2000, and then decline again after that. This hypothesis was mainly driven by the fact that most of the people I know named 'Mary', 'Anna', and 'Emma', are around the same age as I am and thus born somewhere around 1990-2000. The prediction of a decline in popularity after 2000 was mostly because of the recent trend of parents giving their babies less mainstream and more unique names. 
+
+Since this was originally just meant to be a brief exploratory plot, I decided to make a simple line graph to quickly see how the popularity changed over time. The three lines are color coded for each name and are have the additional distinguishing feature of being of different `linetypes`.
+
+## 6. How to Read it & What to Look For
+Since a line graph is typically used to track changes of a variable over time, look for any steep declines or increases of the lines. Also look at how these changes relate between the lines, for things such as if the hierarchy of the lines switch around.
+
+## 7. Presentation Tips
+__Annotation:__ For line graphs that show how a variable changes over time, including annotations that provide an explanation for a drastic and sudden peak of the line by giving some context and background can help enhance the graph and increase its effectiveness.
+
+__Color:__ Using color to distinguish between different lines in a line graph can be extremely useful, especially if there are many lines included in the plot. 
+
+__General Composition:__ Though having the x-value be a variable of time is how line graphs are most often used, other continuous variables that could be used instead are temperature, altitude, or decibels.
+
+## 8. Variations & Alternatives
+Other plot types that can be used to visualize how a variable changes over time include scatterplots and bar plots. Scatterplots can be useful if you have many data points or multiple data points for a given unit of time and have a dense unit of time, such as days. Bar plots can be useful for the exact opposite: when you only have one data point for a given time unit and have a less dense unit of time, such as years. 
+
+## 9. Methods
+To create this plot I first filtered the dataset to find the top three female names in 1880: Mary, Anna, and Emma. 
+```{r}
+# top three names in 1880 by prop
+babynames %>%
+  filter(sex == 'F', year == min(year)) %>% 
+  top_n(3, prop) %>%
+  kable()
+```   
+
+I then made another version of the dataset that only contained data for these three female names. To visualize how the popularity (measured by `prop`), for the three names changed over the years between 1880 and 2015 I used `ggplot2::geom_line` to create a simple line plot. I changed the line type and colors of the three lines to help distinguish them from one another. 
+

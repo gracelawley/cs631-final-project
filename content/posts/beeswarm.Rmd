@@ -1,0 +1,72 @@
+---
+title: "Beeswarm Plot"
+author: "Grace Lawley"
+date: "2018-05-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Plot & Code
+```{r message=FALSE}
+library(gapminder)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(skimr)
+
+
+gapminder <- gapminder %>% 
+  filter(year == 2007 | year == 1952) %>% 
+  group_by(year) %>% 
+  mutate(ww_life_exp = mean(lifeExp))
+
+ggplot(gapminder, aes(continent, lifeExp)) +
+  geom_dotplot(stackdir = 'center',
+               binaxis = 'y',
+               binwidth = .5,
+               binpositions = 'all', 
+               stackratio = 1.5,
+               alpha = 0.6,
+               color = 'thistle') +
+  facet_wrap(~year) +
+  geom_hline(aes(yintercept = ww_life_exp),
+              linetype = 2) +
+  labs(x = 'Continent', y = 'Life Expectancy',
+       title = 'Life Expectancy Across Continents: 1952 & 2007') +
+  theme_minimal()
+
+```
+
+## 2. Graph Type
+A beeswarm is a type of one-dimensional scatter plot where points are even spaced apart, horizontally, to show the volume of points at a given y-value. 
+
+## 3. Data 
+The data used to create this plot is from Jenny Bryan's `gapminder` package. The dataset is actually an excerpt of the [original Gapminder data](http://www.gapminder.org/data/). This smaller dataset includes data for life expectancy, GDP (Gross domestic product) per capita, and population, for 142 countries of 5 continents between the years 1952 and 2007 (in increments of 5 years).
+
+## 4. Audience
+The potential audience of this graph might include a healthcare researcher that is studying life expectancy trends and changes in different continents. 
+
+## 5. Representation Description
+I wanted to explore the life expectancies for each of the five continents included in the gapminder dataset. Since there are a tremendous amount of rows in the full dataset, I limited the plots to only the life expectancies reported in the earliest and latest year represented: 1952 and 2007. I chose a beeswarm plot so that the number of countries for a given continent and a given year that have the same life expectancy reported would be relatively easy to discern in the plots, which would in turn also make comparing the 1952 beeswarms and the 2007 beeswarms easier. 
+
+
+## 6. How to Read it & What to Look For
+Since a beeswarm plot is intended to visualize the distribution of data for multiple categories, look for how the shape of the plot changes as the y-value changes, which y-values have the largest amount of points for a given category, and how the shapes of the plots are different or are similar to the other plots. Since this plot has two subplots, look for how the plots for each continent have changed from 1952 to 2007. 
+
+## 7. Presentation Tips
+__Annotation:__ Including annotations that provide context and explanation for any outliers could be useful. Also, since the number of dots varies between continents, having annotation that explictly states the n values for each continent might be helpful. 
+
+__Color:__ If there were more points plotted you could use color to distinguish which points fall above and which fall below the dashed line representing the 'global mean life expectancy'.
+
+__General Composition:__ Instead of having the plots for the two years be separated, plotting the beeswarms with both years side by side for a given continent could make comparing the plots easier.  
+
+## 8. Variations & Alternatives
+Another plot type that can be used to visualize the distribution of data is a strip chart. A strip chart is also a one-dimensional scatter plot. However, unlike a beeswarm plot, a strip chart allows points to overlap when they have the same y-value. Another plot type used to visualize the distribution of data is a box plot. Box plots are used to visualize the minimum, first quartile, median, third quartile, and maximum for a group or groups of data. 
+
+
+## 9. Methods
+To create this visualization I first filtered the `gapminder` dataset so that it only included data for the years 1952 and 2007. I then added a column containing the average life expectancy across of the countries in the five continents for both 1952 and 2007. To create the points that make up the beeswarms I used `ggplot2::geom_dotplot` and used `facet_wrap()` to create subplots for the two years. I then added horizontal, dashed lines with `ggplot2::geom_hline` to mark the average 'global' life expectancy. 
+

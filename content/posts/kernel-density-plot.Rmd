@@ -1,0 +1,75 @@
+---
+title: "Kernel Density Plot"
+date: "2018-05-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Plot & R Code
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+library(readr)
+library(ggthemes)
+
+
+moma <- read_csv("http://bit.ly/cs631-moma")
+
+moma_year <- moma %>% 
+  mutate(acq_yr_vs_death_yr = case_when(
+    year_acquired < artist_death_year ~ "before artist's death, \nand artist has since died",
+    year_acquired > artist_death_year ~ "after artist's death",
+    year_acquired == artist_death_year ~ "same year as artist's death",
+    is.na(artist_death_year) == TRUE ~ "before artist's death,\nbut artist is still alive")) %>% 
+  drop_na(acq_yr_vs_death_yr)
+
+ggplot(moma_year, aes(year_acquired)) +
+  geom_density(fill = 'thistle3',
+               alpha = .5,
+               na.rm = TRUE) +
+  facet_wrap(~acq_yr_vs_death_yr) +
+  labs(x = "Year Acquired", y = "Density",
+      subtitle = "Year of Artist's Death vs. Year Acquired", 
+      title = "MoMA Paintings, Acquirement Trends")
+```
+
+## 2. Graph Type
+A density plot, a smoothed version of a histogram, is a visualization of the distribution of a continuous variable. This density plot was created with `ggplot2::geom_density`, which uses kernel density estimation for smoothing.  
+
+## 3. Data 
+The data used to make this graph is Dr. Alison Presmanes Hill's cleaned [version] (http://bit.ly/cs631-moma) of MoMA's collection dataset. MoMA's original version is publicly available on [GitHub](https://github.com/MuseumofModernArt/collection).   
+
+The dataset contains 23 variables in total, with each entry corresponding to a piece of artwork in MoMA's collection. Information is included about the artist of each piece, such as a brief bio, birth year, death year, and gender. The number of artists associated with each piece is also provided, with this number further broken down into number of female artists and number of male artists. Also included in the dataset is the year the piece was created, the year it was acquired by MoMA, whether it was acquired by MoMA as a purchse, gift, or exchange, details of the dimensions of the piece, and information about the medium of the artwork. 
+
+## 4. Audience
+The audience for this plot might be individuals or organizations who are members of MoMA and are interested in the types of artwork that MoMA adds to its collection, specifically in the artists of these pieces.
+
+## 5. Representation Description
+I wanted to explore the relationship between the year a piece was acquired by MoMA and the year that the artist of the piece died to see if there were any trends that appeared over time. There are four scenarios depicted in the different facets: 
+    
+1. Paintings which were acquired after the artist's death   
+2. Paintings which were acquired the same year as the artist's death   
+3. Paintings which were acquired before the artist's death but the artist is still alive (at the time of creation of the original dataset)   
+4. Paintings which were acquired before the artist's death, and the artist has since died (at the time of creation of the original dataset).
+
+## 6. How to Read it & What to Look For
+A density plot is a smoothed version of a histogram plot, so one way to interpret these plots is by focusing on the height. The taller the density function for a given facet at a given year, the more paintings that fall under that scenario were acquired by MoMA that year. The shorter the density function, the less paintings of that scenario were acquired that year. As for what to look for, one thing to look at is how the height of the density functions change over the years and if there are any obvious trends.
+
+## 7. Presentation Tips
+__Annotation:__ The density values for each of the facets at a particular year could be included with annotation to emphasize differences between the separate plots.    
+
+__Color:__ Instead of using facet wrap to separate the plots, the four plots could all be included on a single graph with color distinguishing the different categories.    
+
+__General Composition:__ Histograms could be included underneath the density plots to add another layer of information to the visualization.
+
+## 8. Variations & Alternatives
+Violin plots are another popular type of density plot. A violin plot is a box plot that uses density plots instead of the traditional boxes. The density plots are rotated and reflected, with some of the summary statistics included in traditional box plots on top.
+
+## 9. Methods
+To make this plot I created an additional variable, `acq_yr_vs_death_yr`, which describes the relationship between the year a piece was acquired by MoMA and the year that the artist died (if applicable). This variable was then used to separate the paintings into the four different scenarios with `facet_wrap` so that each would have its own plot. The kernel density estimate plots were created with `ggplot2::geom_density`, with the year the paintings were acquired as the y-value. 
+
+
+
+
