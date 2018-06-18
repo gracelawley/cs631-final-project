@@ -6,63 +6,45 @@
     <description>Recent content in Blog on Grace Lawley</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Mon, 28 Sep 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 18 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Example article</title>
-      <link>/blog/example-article/</link>
-      <pubDate>Mon, 28 Sep 2015 00:00:00 +0000</pubDate>
+      <title>Line Graph</title>
+      <link>/blog/line-graph/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/example-article/</guid>
-      <description>Text This is some text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium at ipsum eu pharetra. Proin ac ante et leo ultrices bibendum. Vivamus id ipsum fermentum, aliquam nunc mollis, tempus sapien. Praesent scelerisque cursus eros vitae pretium. Etiam sit amet ligula in leo euismod malesuada. Proin eleifend pulvinar ipsum, eu lobortis ante pharetra eu. Vivamus sem elit, venenatis eget ornare nec, ullamcorper non tellus. Duis quis massa finibus, euismod erat quis, fermentum nunc.</description>
+      <guid>/blog/line-graph/</guid>
+      <description>1. Plot &amp;amp; Code library(tidyverse) library(babynames) library(knitr) top &amp;lt;- c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;) # filtering out all but top three top_names &amp;lt;- babynames %&amp;gt;% filter(sex == &amp;#39;F&amp;#39;, name %in% top) ggplot(top_names, aes(year, prop, color=name)) + geom_line(aes(lty = name), lwd=.75) + scale_linetype_discrete(breaks = NULL) + scale_color_grey(start = .3, end = 1, breaks = c(&amp;#39;Mary&amp;#39;, &amp;#39;Anna&amp;#39;, &amp;#39;Emma&amp;#39;), name = NULL) + labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Proportion&amp;quot;, title = &amp;#39;The Decline of Mary, Anna, and Emma&amp;#39;, subtitle = &amp;#39;The popularity of the top 3 girl names of 1880 over the years&amp;#39;)  2.</description>
     </item>
     
     <item>
-      <title>Hello R Markdown</title>
-      <link>/blog/hello-r-markdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      <title>Beeswarm Plot</title>
+      <link>/blog/beeswarm-plot/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+      <guid>/blog/beeswarm-plot/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) library(knitr) library(skimr) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007 | year == 1952) %&amp;gt;% group_by(year) %&amp;gt;% mutate(ww_life_exp = mean(lifeExp)) ggplot(gapminder, aes(continent, lifeExp)) + geom_dotplot(stackdir = &amp;#39;center&amp;#39;, binaxis = &amp;#39;y&amp;#39;, binwidth = .5, binpositions = &amp;#39;all&amp;#39;, stackratio = 1.5, alpha = 0.6, color = &amp;#39;thistle&amp;#39;) + facet_wrap(~year) + geom_hline(aes(yintercept = ww_life_exp), linetype = 2) + labs(x = &amp;#39;Continent&amp;#39;, y = &amp;#39;Life Expectancy&amp;#39;, title = &amp;#39;Life Expectancy Across Continents: 1952 &amp;amp; 2007&amp;#39;) + theme_minimal()  2.</description>
     </item>
     
     <item>
-      <title>Creating a New Theme</title>
-      <link>/blog/creating-a-new-theme/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>Kernel Density Plot</title>
+      <link>/blog/kernel-density-plot/</link>
+      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/creating-a-new-theme/</guid>
-      <description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
-We&amp;rsquo;ll start with creating a new site with a very basic template.</description>
+      <guid>/blog/kernel-density-plot/</guid>
+      <description>1. Plot &amp;amp; R Code library(tidyverse) library(readr) library(ggthemes) moma &amp;lt;- read_csv(&amp;quot;http://bit.ly/cs631-moma&amp;quot;) moma_year &amp;lt;- moma %&amp;gt;% mutate(acq_yr_vs_death_yr = case_when( year_acquired &amp;lt; artist_death_year ~ &amp;quot;before artist&amp;#39;s death, \nand artist has since died&amp;quot;, year_acquired &amp;gt; artist_death_year ~ &amp;quot;after artist&amp;#39;s death&amp;quot;, year_acquired == artist_death_year ~ &amp;quot;same year as artist&amp;#39;s death&amp;quot;, is.na(artist_death_year) == TRUE ~ &amp;quot;before artist&amp;#39;s death,\nbut artist is still alive&amp;quot;)) %&amp;gt;% drop_na(acq_yr_vs_death_yr) ggplot(moma_year, aes(year_acquired)) + geom_density(fill = &amp;#39;thistle3&amp;#39;, alpha = .5, na.rm = TRUE) + facet_wrap(~acq_yr_vs_death_yr) + labs(x = &amp;quot;Year Acquired&amp;quot;, y = &amp;quot;Density&amp;quot;, subtitle = &amp;quot;Year of Artist&amp;#39;s Death vs.</description>
     </item>
     
     <item>
-      <title>(Hu)go Template Primer</title>
-      <link>/blog/hugo-template-primer/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      <title>Strip Chart</title>
+      <link>/blog/strip-chart/</link>
+      <pubDate>Tue, 01 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/hugo-template-primer/</guid>
-      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</description>
-    </item>
-    
-    <item>
-      <title>Getting Started with Hugo</title>
-      <link>/blog/getting-started-with-hugo/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/getting-started-with-hugo/</guid>
-      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at installing hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
- Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
+      <guid>/blog/strip-chart/</guid>
+      <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) options(scipen=999) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007) ggplot(gapminder, aes(continent, gdpPercap)) + geom_hline(aes(yintercept = median(gdpPercap)), linetype = 2) + geom_jitter(width = 0.2, height = 0, alpha = 0.6, color = &amp;#39;darkolivegreen&amp;#39;, fill = &amp;#39;darkolivegreen&amp;#39;) + labs(x = &amp;quot;Continent&amp;quot;, y = &amp;quot;Per Capita GDP&amp;quot;) + ggtitle(&amp;quot;GDP per Capita in 2007&amp;quot;) + theme_minimal() + annotate(geom = &amp;#39;text&amp;#39;, x = .6, y = 7290, size = 2.</description>
     </item>
     
   </channel>

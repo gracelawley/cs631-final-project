@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Project on Grace Lawley</title>
+    <link>/project/</link>
+    <description>Recent content in Project on Grace Lawley</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 17 Jun 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CS 632: Final Visualization Project</title>
+      <link>/project/final_vis/</link>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/project/final_vis/</guid>
+      <description>Ridgeline Plot Description of the Data Over the past few weeks I have been wrangling and exploring a subset of data that is available for free online at the Child Language Data Exchange System (CHILDES), which is an enormous online repository of language acquisition data. The data that I have been exploring and analyzing is a subset of 14 from the “Eng-NA” section of CHILDES. The “Eng-NA” section contains 50+ individual corpora with language acquisition data of North American English.</description>
+    </item>
+    
+    <item>
+      <title>Project</title>
+      <link>/project/project/</link>
+      <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
+      
+      <guid>/project/project/</guid>
+      <description>Here is my final presentation slide deck!
+Below is the graph brief for my final presentation.</description>
+    </item>
+    
+  </channel>
+</rss>

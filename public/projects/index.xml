@@ -6,30 +6,28 @@
     <description>Recent content in Projects on Grace Lawley</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 19 Aug 2015 20:29:37 -0700</lastBuildDate>
     
 	<atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>A small project example : add yours !</title>
-      <link>/projects/small-project/</link>
-      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Projects</title>
+      <link>/projects/projects/</link>
+      <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>/projects/small-project/</guid>
-      <description>Along with Ford Prefect, Dent barely escapes the Earth&amp;rsquo;s destruction as it is demolished to make way for a hyperspace bypass. Arthur spends the next several years, still wearing his dressing gown, helplessly launched from crisis to crisis while trying to straighten out his lifestyle.
- He rather enjoys tea, but seems to have trouble obtaining it in the far reaches of the galaxy.
- In time, he learns how to fly and carves a niche for himself as a sandwich-maker.</description>
+      <guid>/projects/projects/</guid>
+      <description>Here is my final presentation slide deck!
+Below is the graph brief for my final presentation.</description>
     </item>
     
     <item>
-      <title>Projects</title>
-      <link>/projects/final/</link>
-      <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
+      <title>CS 632: Final Visualization Project</title>
+      <link>/projects/final_vis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/projects/final/</guid>
-      <description>In this theme, it is possible to add sections like a Projects one for example. You can add plenty of articles about your projects and a presentation page that will be displayed before the list. All is modulable, if you don&amp;rsquo;t want something.
-A Hollywood-funded film version, produced and filmed in the UK, was released in April 2005, and radio adaptations of the third, fourth, and fifth novels were broadcast from 2004 to 2005.</description>
+      <guid>/projects/final_vis/</guid>
+      <description>Ridgeline Plot Description of the Data Over the past few weeks I have been wrangling and exploring a subset of data that is available for free online at the Child Language Data Exchange System (CHILDES), which is an enormous online repository of language acquisition data. The data that I have been exploring and analyzing is a subset of 14 from the “Eng-NA” section of CHILDES. The “Eng-NA” section contains 50+ individual corpora with language acquisition data of North American English.</description>
     </item>
     
   </channel>

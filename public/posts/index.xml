@@ -41,7 +41,7 @@
     <item>
       <title>Strip Chart</title>
       <link>/posts/strip-chart/</link>
-      <pubDate>Fri, 01 May 2015 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/posts/strip-chart/</guid>
       <description>1. Plot &amp;amp; Code library(gapminder) library(ggplot2) library(dplyr) options(scipen=999) gapminder &amp;lt;- gapminder %&amp;gt;% filter(year == 2007) ggplot(gapminder, aes(continent, gdpPercap)) + geom_hline(aes(yintercept = median(gdpPercap)), linetype = 2) + geom_jitter(width = 0.2, height = 0, alpha = 0.6, color = &amp;#39;darkolivegreen&amp;#39;, fill = &amp;#39;darkolivegreen&amp;#39;) + labs(x = &amp;quot;Continent&amp;quot;, y = &amp;quot;Per Capita GDP&amp;quot;) + ggtitle(&amp;quot;GDP per Capita in 2007&amp;quot;) + theme_minimal() + annotate(geom = &amp;#39;text&amp;#39;, x = .6, y = 7290, size = 2.</description>
