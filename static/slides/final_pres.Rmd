@@ -108,11 +108,15 @@ kuczaj_raw$gloss[78:83]
 
 --
 
-* **Positive = ** *trust*, *joy*, *anticipation*  
++ **Positive =** *trust*, *joy*, *anticipation*  
 --
 
-* **Negative = ** *sadness*, *fear*, *anger*
++ **Negative =** *sadness*, *fear*, *anger*
 
+--
+
+* Ridgeline Plot 
+  + Typically used to visualize how the distributions of several groups change over time or space
 ---
 # The Plot
 ```{r echo = FALSE}
