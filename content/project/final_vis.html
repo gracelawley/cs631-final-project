@@ -1,0 +1,186 @@
+---
+title: "CS 632: Final Visualization Project"
+author: "Grace Lawley"
+date: "2018-06-17"
+output: html_document
+---
+
+
+
+<div id="ridgeline-plot" class="section level1">
+<h1>Ridgeline Plot</h1>
+<p><img src="/project/final_vis_files/figure-html/intial%20plot-1.png" width="960" /></p>
+</div>
+<div id="description-of-the-data" class="section level1">
+<h1>Description of the Data</h1>
+<p>Over the past few weeks I have been wrangling and exploring a subset of data that is available for free online at the <a href="https://childes.talkbank.org/">Child Language Data Exchange System</a> (CHILDES), which is an enormous online repository of language acquisition data. The data that I have been exploring and analyzing is a subset of 14 from the “Eng-NA” section of CHILDES. The “Eng-NA” section contains 50+ individual corpora with language acquisition data of North American English.</p>
+<p>For my final visualization project, I decided to work with one of the 14 corpora that I have been exploring, the <a href="https://childes.talkbank.org/access/Eng-NA/Kuczaj.html">Kuczaj Corpus</a>. The Kuczaj Corpus contains transcripts of spontaneous speech collected during a longitudinal case study conducted by Stan Kuczaj on his son, Abe. Specificaly, Kuczaj was studying the acquisition of certain verb inflections. The study took place from 1973-1975, when Abe was 28 months old to 60 months old.</p>
+</div>
+<div id="creating-the-visualization" class="section level1">
+<h1>Creating the Visualization</h1>
+<p>The raw data used for this project was gathered from the CHILDES database via the <code>childesr</code> package. Since I was interested in examining the speech of Abe, I pulled down all of his utterances across the entire corpus.</p>
+<pre class="r"><code># Loading packages
+library(childesr)
+library(magrittr)
+library(tidytext)
+library(ggridges)
+library(ggplot2)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(egg)</code></pre>
+<pre class="r"><code># Pulling down the raw utterances from the childes db
+kuczaj_raw &lt;- childesr::get_utterances(collection = &quot;Eng-NA&quot;,
+                                       corpus = &quot;Kuczaj&quot;,
+                                       role = &quot;Target_Child&quot;)</code></pre>
+<p>Before I could begin making my visualization, there was quite a bit of data organizing and data cleaning that had to be done first. I started by rearranging the raw dataframe, <code>kuczaj_raw</code>, and removed any columns that I would not be needing later on. Since unlike other corpora included in the CHILDES database, the Kuczaj Corpus only has one target child, a lot of the metadata about the text was unneeded and I only ended up using the <code>gloss</code> (the utterance) and <code>target_child_age</code> (age at time of utterance) columns.</p>
+<p>After reorganizing the columns, I made sure to filter out any missing utterances that there might be in the dataset.</p>
+<pre class="r"><code># Rearrange/renaming columns and removing missing utterances
+kuczaj &lt;- kuczaj_raw %&gt;% 
+  select(utt = gloss, age_months = target_child_age) %&gt;% 
+  drop_na(utt) %&gt;% 
+  filter(utt != &quot;&quot;) </code></pre>
+<p>After the reorganization was finished, I began working on cleaning the data. I standarized all contractions that occured. Contractions were either expanded or collapsed, depending on whether they were an exception case or a general case. I made a subjective decision to remove all occurences of <code>'s</code>, since it’s grammatical meaning is ambiguous: it can either signify a possessive <code>'s</code> or a collapsed <code>is</code>.</p>
+<p>In addition to processing contractions, I removed all underscores (used to signify a phrase), and converted all characters to lowercase.</p>
+<pre class="r"><code># Creating a function to process contractions
+
+proc_contractions &lt;- function(string) {
+  string %&lt;&gt;%
+    # Expanding the exception cases
+    str_replace_all(&quot;won&#39;t&quot;, &quot;will not&quot;) %&gt;%
+    str_replace_all(&quot;can&#39;t&quot;, &quot;can not&quot;) %&gt;%
+    str_replace_all(&quot;c&#39;mon&quot;, &quot;come on&quot;) %&gt;% 
+    str_replace_all(&quot;let&#39;s&quot;, &quot;let us&quot;) %&gt;% 
+    str_replace_all(&quot;shan&#39;t&quot;, &quot;shall not&quot;) %&gt;% 
+    str_replace_all(&quot;y&#39;all&quot;, &quot;you all&quot;) %&gt;% 
+    
+    # Collapsing &quot;o&#39;clock&quot; bc the expansion, &quot;of the clock&quot; is uncommon/archaic
+    str_replace_all(&quot;o&#39;clock&quot;, &quot;oclock&quot;) %&gt;%
+    
+    # Collapsing &quot;ain&#39;t&quot; bc the expansion is ambiguous
+    str_replace_all(&quot;ain&#39;t&quot;, &quot;aint&quot;) %&gt;%
+    
+    # Expanding the general cases
+    str_replace_all(&quot;&#39;m&quot;, &quot; am&quot;) %&gt;%
+    str_replace_all(&quot;n&#39;t&quot;, &quot; not&quot;) %&gt;%
+    str_replace_all(&quot;&#39;ll&quot;, &quot; will&quot;) %&gt;%
+    str_replace_all(&quot;&#39;d&quot;, &quot; would&quot;) %&gt;%
+    str_replace_all(&quot;&#39;ve&quot;, &quot; have&quot;) %&gt;%
+    str_replace_all(&quot;n&#39;ts&quot;, &quot; nots&quot;) %&gt;%
+    str_replace_all(&quot;&#39;re&quot;, &quot; are&quot;) %&gt;%
+    
+    # Removing all &quot;&#39;s&quot; bc the expansion is ambiguous (possessive or &quot; is&quot;)
+    str_replace_all(&quot;&#39;s&quot;, &quot;&quot;) %&gt;%
+    
+    # Catching any missed apostrophes
+    str_replace_all(&quot;&#39;&quot;, &quot;&quot;)
+  
+  return(string)
+}</code></pre>
+<pre class="r"><code># Processing utterances
+kuczaj$utt %&lt;&gt;%
+  
+  # Removing all underscores
+  str_replace_all(&quot;_&quot;, &quot; &quot;) %&gt;% 
+  
+  # Processing contractions
+  proc_contractions() %&gt;% 
+  
+  # Changing all characters to lowercase
+  str_to_lower()</code></pre>
+<p>Since the age of a person is typically quantified and referred to in years instead of months, it makes sense to convert the unit that records age in the dataframe to years instead of months.</p>
+<pre class="r"><code># Adding a column with age in years
+kuczaj %&lt;&gt;%
+  mutate(age_years = age_months/12)</code></pre>
+<p>The next step is unnesting the utterances into tokens. For this visualization I chose to tokenizing the text into unigrams using the <code>unnest_tokens()</code> function from the <code>tidytext</code> package.</p>
+<pre class="r"><code># Tokenizing into unigrams
+tokens_raw &lt;- kuczaj %&gt;% 
+  unnest_tokens(output = word, input = utt)</code></pre>
+<p>Since text data can be hard to visualize by itself, I chose to visualize the emotion in the text. I performed a sentiment analysis with the <code>&quot;nrc&quot;</code> sentiment lexicon included in the <code>tidytext</code> package. The <code>nrc</code> sentiment lexicon classifies words into 10 different sentiment categories: <code>anger</code>, <code>anticipation</code>, <code>disgust</code>, <code>fear</code>, <code>joy</code>, <code>negative</code>, <code>positive</code>, <code>sadness</code>, <code>surprise</code>, and <code>trust</code>.</p>
+<p>After initializing the lexicon, I combined it with the tokens using an <code>dplyr::inner_merge</code>. Only the tokens that occured in both dataframes were kept, while all other tokens were removed.</p>
+<pre class="r"><code># Initizalizing &quot;nrc&quot; sentiment lexicon
+nrc &lt;- tidytext::get_sentiments(&quot;nrc&quot;)
+
+# Merging together tokens and nrc
+nrc_df &lt;- tokens_raw %&gt;% 
+  inner_join(nrc, by = &quot;word&quot;)  </code></pre>
+<p>And finally, making the plot!</p>
+<p>I decided to restrict the sentiment categories from 10 to 6, and grouped these 6 into emotions that associated with a positive sentiment – <code>joy</code>, <code>trust</code>, and <code>anticipation</code> – and emotions that are associated with a negative sentiment – <code>anger</code>, <code>sadness</code>, and <code>fear</code>. The creation of these groupings was mostly a subjective decision that was partially motivated from exploring the most common sets of emotions as illustrated on the <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Word-Emotion Association Lexicon</a></p>
+<p>To make the actual ridgeline plot, I used the <code>geom_density_ridges()</code> extension to <code>ggplot()</code>, provided in the <code>ggridges</code> package. I created the ridgeline plot of the positive and negative sentiment groups separately, and then combined them together using the <code>ggarrange()</code> function from the <code>egg</code> package.</p>
+<pre class="r"><code># Making the plot!
+
+# Creating the positive subplot
+positive_plot &lt;- nrc_df %&gt;% 
+  filter(sentiment %in% c(&quot;joy&quot;, &quot;trust&quot;, &quot;anticipation&quot;)) %&gt;% 
+  ggplot(aes(x = age_years, y = sentiment, fill = sentiment)) +
+    geom_density_ridges(alpha = 0.8, show.legend = FALSE) +
+    labs(x = &quot;&quot;, y = &quot;&quot;, title = &quot;Kuczaj Corpus &amp; Sentiment&quot;,
+         subtitle = &quot;\nPositive Sentiments&quot;) +
+    scale_y_discrete(expand = c(0.01, 0)) +
+    scale_x_continuous(expand = c(0.01, 0)) +
+    scale_fill_manual(values = c(&quot;#F6EFF7&quot;, &quot;#D0D1E6&quot;, &quot;#A6BDDB&quot;)) +
+    theme_ridges(grid = FALSE) +
+    theme(plot.title = element_text(size = 22, hjust = -0.2),
+          plot.subtitle = element_text(size = 18, face = &quot;italic&quot;),
+          axis.text.y = element_text(size = 16, face = &quot;bold.italic&quot;))
+    
+# Creating the negative subplot
+negative_plot &lt;- nrc_df %&gt;% 
+  filter(sentiment %in% c(&quot;anger&quot;, &quot;sadness&quot;, &quot;fear&quot;)) %&gt;% 
+  ggplot(aes(x = age_years, y = sentiment, fill = sentiment)) +
+    geom_density_ridges(alpha = 0.7, show.legend = FALSE) +
+    labs(x = &quot;Age in Years&quot;, y = &quot;&quot;, title = &quot;&quot;,
+         subtitle = &quot;Negative Sentiments&quot;) +
+    scale_y_discrete(expand = c(0.01, 0)) +
+    scale_x_continuous(expand = c(0.01, 0)) +
+    scale_fill_manual(values = c(&quot;#7999A8&quot;, &quot;#1C9099&quot;, &quot;#016C59&quot;)) +
+    theme_ridges(grid = FALSE) +
+    theme(plot.subtitle = element_text(size = 18, face = &quot;italic&quot;),
+          axis.text.y = element_text(size = 16, face = &quot;bold.italic&quot;))
+
+# Combining into one and plotting
+egg::ggarrange(positive_plot, negative_plot, ncol = 1, nrow = 2)</code></pre>
+<p><img src="/project/final_vis_files/figure-html/plotting-1.png" width="960" /></p>
+</div>
+<div id="description-of-the-audience" class="section level1">
+<h1>Description of the Audience</h1>
+<p>Since this data comes from a larger dataset that I am currently exploring in my researcher, potential audiences for this visualization might include my advisor, my colleagues, and other faculty at CSLU. In fact, I actually am planning on showing this visualization to my advisor tomorrow morning.
+As for as potential audiences in a more general sense, this might include students or researchers interested in natural language processing, text mining, language acquisition, and sentiment analysis.</p>
+</div>
+<div id="description-of-the-graph-type" class="section level1">
+<h1>Description of the Graph Type</h1>
+<p>A ridgeline plot visualizes the distribution of various groups, either as density plots or histograms, with the individual plots staggered vertically on a common x-axis, and layered slightly overlapping each other. They are typically used to visualize how the aspects of a categorical variable change over time or space.</p>
+</div>
+<div id="representation-description" class="section level1">
+<h1>Representation Description</h1>
+<p>I had never conducted any form of sentiment analysis on language acquisition data from CHILDES before and was curious if there would be any trends in sentiment types as the child grew older. Would he use more words that were associated with joy as he grew older? Would he use less? Would there be no discernable difference?</p>
+<p>After narrowing down the sentiment categories from ten to six, I chose to group the remaining ones into a “positive” group and a “negative” group. I made this decision after first plotting all six sentiments in one graph and seeing how difficult it was to read the plot at a quick glance. I thought that breaking the sentiments into two groups would make the information shown by the plot not only easier to read, but would it easier to make comparisons across categories by providing some order.</p>
+</div>
+<div id="how-to-read-it-what-to-look-for" class="section level1">
+<h1>How to Read it &amp; What to Look For</h1>
+<p>Since the differences between sentiments are for the most part subtle, I find it easiest and most interesting to read this plot by first choosing two specific categories, and then comparing them to each other. Since the y-axis of this plot is a categorical variable, more information can be gathered if looking at subsections of the plot separately instead of looking at the entire plot at once.</p>
+</div>
+<div id="presentation" class="section level1">
+<h1>Presentation</h1>
+<p><strong>General Composition:</strong> To reinforce the grouping of the sentiments into “positive” and “negative”, I chose to plot the two groups separately and stacked vertically. This preserved the common x-axis that is an essential characteristic of ridgeline plots, while also breaking apart plot making it easier to read.</p>
+<p><strong>Color:</strong> Choosing the colors for this plot was difficult. I wanted to reflect the separation of sentiments into two groups while also being sure to emphasize that the sentiments were still categorical and not ordered. I tried to capture this with the colors by using a diverging color palette of distinct colors.</p>
+<p><strong>Annotation:</strong> I used <code>theme_ridges()</code> first with further customization of the theme afterwards. I chose to make the sentiments in bold and italicized to highlight the categories, and included subtitles of “Postiive Sentiments” and “Negative Sentiments” to show the grouping. Since the x-axis is the same for both plots, I chose to only include the y-axis label for the bottom plot.</p>
+</div>
+<div id="an-early-draft" class="section level1">
+<h1>An Early Draft</h1>
+<p>Here is an early draft of my visualization. This version of the plot came before the sentiments were grouped into “positive” and “negative” and before I altered the general plot composition and colors. I had already chosen to reduce the total number of sentiments, but had only reduced it down to 8 for this plot.</p>
+<pre class="r"><code># Loading package for colors
+library(beyonce)
+
+# Making the plot
+nrc_df %&gt;% 
+  filter(!sentiment %in% c(&quot;positive&quot;, &quot;negative&quot;)) %&gt;% 
+  ggplot(aes(x = age_years, y = sentiment, fill = sentiment)) +
+    geom_density_ridges(alpha = 0.8, show.legend = FALSE) +
+    labs(x = &quot;Age in Years&quot;, y = &quot;&quot;, title = &quot;Kuczaj Corpus &amp; Sentiment&quot;) +
+    scale_y_discrete(expand = c(0.01, 0)) +
+    scale_x_continuous(expand = c(0.01, 0)) +
+    theme_ridges(grid = FALSE) +
+    scale_fill_manual(values = beyonce_palette(64))</code></pre>
+<p><img src="/project/final_vis_files/figure-html/early%20draft-1.png" width="960" /></p>
+</div>

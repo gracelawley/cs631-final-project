@@ -5,4 +5,4 @@ title = "Project"
 
 Here is my final presentation slide deck!
 
-Below is the graph brief for my final presentation.
+Below you can find the graph brief for my final presentation.

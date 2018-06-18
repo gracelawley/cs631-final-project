@@ -1116,13 +1116,15 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
     
     <div id="ridgeline-plot" class="section level1">
 <h1>Ridgeline Plot</h1>
-<div id="description-of-the-data" class="section level2">
-<h2>Description of the Data</h2>
+<p><img src="/project/final_vis_files/figure-html/intial%20plot-1.png" width="960" /></p>
+</div>
+<div id="description-of-the-data" class="section level1">
+<h1>Description of the Data</h1>
 <p>Over the past few weeks I have been wrangling and exploring a subset of data that is available for free online at the <a href="https://childes.talkbank.org/">Child Language Data Exchange System</a> (CHILDES), which is an enormous online repository of language acquisition data. The data that I have been exploring and analyzing is a subset of 14 from the “Eng-NA” section of CHILDES. The “Eng-NA” section contains 50+ individual corpora with language acquisition data of North American English.</p>
 <p>For my final visualization project, I decided to work with one of the 14 corpora that I have been exploring, the <a href="https://childes.talkbank.org/access/Eng-NA/Kuczaj.html">Kuczaj Corpus</a>. The Kuczaj Corpus contains transcripts of spontaneous speech collected during a longitudinal case study conducted by Stan Kuczaj on his son, Abe. Specificaly, Kuczaj was studying the acquisition of certain verb inflections. The study took place from 1973-1975, when Abe was 28 months old to 60 months old.</p>
 </div>
-<div id="creating-the-visualization" class="section level2">
-<h2>Creating the Visualization</h2>
+<div id="creating-the-visualization" class="section level1">
+<h1>Creating the Visualization</h1>
 <p>The raw data used for this project was gathered from the CHILDES database via the <code>childesr</code> package. Since I was interested in examining the speech of Abe, I pulled down all of his utterances across the entire corpus.</p>
 <pre class="r"><code># Loading packages
 library(childesr)
@@ -1247,18 +1249,47 @@ negative_plot &lt;- nrc_df %&gt;%
 egg::ggarrange(positive_plot, negative_plot, ncol = 1, nrow = 2)</code></pre>
 <p><img src="/project/final_vis_files/figure-html/plotting-1.png" width="960" /></p>
 </div>
-<div id="description-of-the-audience" class="section level2">
-<h2>Description of the Audience</h2>
+<div id="description-of-the-audience" class="section level1">
+<h1>Description of the Audience</h1>
+<p>Since this data comes from a larger dataset that I am currently exploring in my researcher, potential audiences for this visualization might include my advisor, my colleagues, and other faculty at CSLU. In fact, I actually am planning on showing this visualization to my advisor tomorrow morning.
+As for as potential audiences in a more general sense, this might include students or researchers interested in natural language processing, text mining, language acquisition, and sentiment analysis.</p>
 </div>
-<div id="description-of-the-graph-type" class="section level2">
-<h2>Description of the Graph Type</h2>
+<div id="description-of-the-graph-type" class="section level1">
+<h1>Description of the Graph Type</h1>
+<p>A ridgeline plot visualizes the distribution of various groups, either as density plots or histograms, with the individual plots staggered vertically on a common x-axis, and layered slightly overlapping each other. They are typically used to visualize how the aspects of a categorical variable change over time or space.</p>
 </div>
-<div id="representation-description" class="section level2">
-<h2>Representation Description</h2>
+<div id="representation-description" class="section level1">
+<h1>Representation Description</h1>
+<p>I had never conducted any form of sentiment analysis on language acquisition data from CHILDES before and was curious if there would be any trends in sentiment types as the child grew older. Would he use more words that were associated with joy as he grew older? Would he use less? Would there be no discernable difference?</p>
+<p>After narrowing down the sentiment categories from ten to six, I chose to group the remaining ones into a “positive” group and a “negative” group. I made this decision after first plotting all six sentiments in one graph and seeing how difficult it was to read the plot at a quick glance. I thought that breaking the sentiments into two groups would make the information shown by the plot not only easier to read, but would it easier to make comparisons across categories by providing some order.</p>
 </div>
-<div id="how-to-read-it-what-to-look-for" class="section level2">
-<h2>How to Read it &amp; What to Look For</h2>
+<div id="how-to-read-it-what-to-look-for" class="section level1">
+<h1>How to Read it &amp; What to Look For</h1>
+<p>Since the differences between sentiments are for the most part subtle, I find it easiest and most interesting to read this plot by first choosing two specific categories, and then comparing them to each other. Since the y-axis of this plot is a categorical variable, more information can be gathered if looking at subsections of the plot separately instead of looking at the entire plot at once.</p>
 </div>
+<div id="presentation" class="section level1">
+<h1>Presentation</h1>
+<p><strong>General Composition:</strong> To reinforce the grouping of the sentiments into “positive” and “negative”, I chose to plot the two groups separately and stacked vertically. This preserved the common x-axis that is an essential characteristic of ridgeline plots, while also breaking apart plot making it easier to read.</p>
+<p><strong>Color:</strong> Choosing the colors for this plot was difficult. I wanted to reflect the separation of sentiments into two groups while also being sure to emphasize that the sentiments were still categorical and not ordered. I tried to capture this with the colors by using a diverging color palette of distinct colors.</p>
+<p><strong>Annotation:</strong> I used <code>theme_ridges()</code> first with further customization of the theme afterwards. I chose to make the sentiments in bold and italicized to highlight the categories, and included subtitles of “Postiive Sentiments” and “Negative Sentiments” to show the grouping. Since the x-axis is the same for both plots, I chose to only include the y-axis label for the bottom plot.</p>
+</div>
+<div id="an-early-draft" class="section level1">
+<h1>An Early Draft</h1>
+<p>Here is an early draft of my visualization. This version of the plot came before the sentiments were grouped into “positive” and “negative” and before I altered the general plot composition and colors. I had already chosen to reduce the total number of sentiments, but had only reduced it down to 8 for this plot.</p>
+<pre class="r"><code># Loading package for colors
+library(beyonce)
+
+# Making the plot
+nrc_df %&gt;% 
+  filter(!sentiment %in% c(&quot;positive&quot;, &quot;negative&quot;)) %&gt;% 
+  ggplot(aes(x = age_years, y = sentiment, fill = sentiment)) +
+    geom_density_ridges(alpha = 0.8, show.legend = FALSE) +
+    labs(x = &quot;Age in Years&quot;, y = &quot;&quot;, title = &quot;Kuczaj Corpus &amp; Sentiment&quot;) +
+    scale_y_discrete(expand = c(0.01, 0)) +
+    scale_x_continuous(expand = c(0.01, 0)) +
+    theme_ridges(grid = FALSE) +
+    scale_fill_manual(values = beyonce_palette(64))</code></pre>
+<p><img src="/project/final_vis_files/figure-html/early%20draft-1.png" width="960" /></p>
 </div>
 
 
