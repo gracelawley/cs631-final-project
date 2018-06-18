@@ -13,7 +13,7 @@
 class: center, middle, inverse, title-slide
 
 # Sentiment Analysis of a CHILDES corpus
-## CS631: Final Presentation
+## CS631: Final Project
 ### Grace Lawley
 ### June 18th, 2018
 
@@ -77,11 +77,7 @@ class: center, middle, inverse, title-slide
 
 # Cleaning &amp; Processing the Data
 --
-
-* Used only the `gloss` (utterances) and `target_child_age` (age in months) columns
-
---
-
+  
 * Expanded or collapsed contractions, e.g.:
   + "wont" → "will not"
   + "can't" → "can not"
@@ -104,7 +100,7 @@ class: center, middle, inverse, title-slide
 # Sentiment Analysis
 --
 
-* Used the `nrc` sentiment lexicon from the `tidytext` package
+* Used the `nrc` Word-Emotion Association Lexicon in the `tidytext` package
 
 --
 
@@ -127,11 +123,22 @@ class: center, middle, inverse, title-slide
 
 --
 
-* **Positive = ** *trust*, *joy*, *anticipation*  
++ **Positive =** *trust*, *joy*, *anticipation*  
 --
 
-* **Negative = ** *sadness*, *fear*, *anger*
++ **Negative =** *sadness*, *fear*, *anger*
 
+--
+
+* Ridgeline Plot 
+  + Typically used to visualize how the distributions of several groups change over time or space
+  
+--
+
+* Limitations: 
+  + Data is not normalized for total word count of each transcript
+  + Exploratory data analysis 
+  
 ---
 # The Plot
 ![](final_plot.png)&lt;!-- --&gt;

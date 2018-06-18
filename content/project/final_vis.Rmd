@@ -313,7 +313,6 @@ I had never conducted any form of sentiment analysis on language acquisition dat
 
 After narrowing down the sentiment categories from ten to six, I chose to group the remaining ones into a "positive" group and a "negative" group. I made this decision after first plotting all six sentiments in one graph and seeing how difficult it was to read the plot at a quick glance. I thought that breaking the sentiments into two groups would make the information shown by the plot not only easier to read, but would it easier to make comparisons across categories by providing some order.
 
-
 # How to Read it & What to Look For
 Since the differences between sentiments are for the most part subtle, I find it easiest and most interesting to read this plot by first choosing two specific categories, and then comparing them to each other. Since the y-axis of this plot is a categorical variable, more information can be gathered if looking at subsections of the plot separately instead of looking at the entire plot at once. 
 
@@ -323,6 +322,9 @@ Since the differences between sentiments are for the most part subtle, I find it
 **Color:** Choosing the colors for this plot was difficult. I wanted to reflect the separation of sentiments into two groups while also being sure to emphasize that the sentiments were still categorical and not ordered. I tried to capture this with the colors by using a diverging color palette of distinct colors. 
 
 **Annotation:** I used `theme_ridges()` first with further customization of the theme afterwards. I chose to make the sentiments in bold and italicized to highlight the categories, and included subtitles of "Postiive Sentiments" and "Negative Sentiments" to show the grouping. Since the x-axis is the same for both plots, I chose to only include the y-axis label for the bottom plot.
+
+# Limitations
+This plot is the result of an purely exploratory analysis venture that was limited by time constraints and not the result of an indepth, thorough analysis. Due to a lack of time, I was unable to normalize the data for differences in total word count across transcript. Any trends that this plot suggests may be due to confounding factors that were not controlled during analysis. Thus, this plot may not be an entirely accurate representation of the true nature of the dataset.
 
 # An Early Draft
 Here is an early draft of my visualization. This version of the plot came before the sentiments were grouped into "positive" and "negative" and before I altered the general plot composition and colors. I had already chosen to reduce the total number of sentiments, but had only reduced it down to 8 for this plot.

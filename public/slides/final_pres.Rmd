@@ -1,6 +1,6 @@
 ---
 title: "Sentiment Analysis of a CHILDES corpus"
-subtitle: "CS631: Final Presentation"
+subtitle: "CS631: Final Project"
 author: "Grace Lawley"
 date: "June 18th, 2018"
 output: 
@@ -58,11 +58,7 @@ kuczaj_raw$gloss[78:83]
 
 # Cleaning & Processing the Data
 --
-
-* Used only the `gloss` (utterances) and `target_child_age` (age in months) columns
-
---
-
+  
 * Expanded or collapsed contractions, e.g.:
   + "wont" → "will not"
   + "can't" → "can not"
@@ -85,7 +81,7 @@ kuczaj_raw$gloss[78:83]
 # Sentiment Analysis
 --
 
-* Used the `nrc` sentiment lexicon from the `tidytext` package
+* Used the `nrc` Word-Emotion Association Lexicon in the `tidytext` package
 
 --
 
@@ -108,11 +104,22 @@ kuczaj_raw$gloss[78:83]
 
 --
 
-* **Positive = ** *trust*, *joy*, *anticipation*  
++ **Positive =** *trust*, *joy*, *anticipation*  
 --
 
-* **Negative = ** *sadness*, *fear*, *anger*
++ **Negative =** *sadness*, *fear*, *anger*
 
+--
+
+* Ridgeline Plot 
+  + Typically used to visualize how the distributions of several groups change over time or space
+  
+--
+
+* Limitations: 
+  + Data is not normalized for total word count of each transcript
+  + Exploratory data analysis 
+  
 ---
 # The Plot
 ```{r echo = FALSE}
