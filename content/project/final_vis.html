@@ -13,8 +13,8 @@ output: html_document
 </div>
 <div id="description-of-the-data" class="section level1">
 <h1>Description of the Data</h1>
-<p>Over the past few weeks I have been wrangling and exploring a subset of data that is available for free online at the <a href="https://childes.talkbank.org/">Child Language Data Exchange System</a> (CHILDES), which is an enormous online repository of language acquisition data. The data that I have been exploring and analyzing is a subset of 14 from the “Eng-NA” section of CHILDES. The “Eng-NA” section contains 50+ individual corpora with language acquisition data of North American English.</p>
-<p>For my final visualization project, I decided to work with one of the 14 corpora that I have been exploring, the <a href="https://childes.talkbank.org/access/Eng-NA/Kuczaj.html">Kuczaj Corpus</a>. The Kuczaj Corpus contains transcripts of spontaneous speech collected during a longitudinal case study conducted by Stan Kuczaj on his son, Abe. Specificaly, Kuczaj was studying the acquisition of certain verb inflections. The study took place from 1973-1975, when Abe was 28 months old to 60 months old.</p>
+<p>Over the past few weeks of my research I have been wrangling and exploring a subset of data from the <a href="https://childes.talkbank.org/">Child Language Data Exchange System</a> (CHILDES), an enormous online repository of language acquisition data that is available online for free. The data that I have been studying is a subset of 14 corpora from the <em>Eng-NA</em> section of CHILDES. The <em>Eng-NA</em> section contains 50+ individual corpora with language acquisition data of exclusively North American English.</p>
+<p>Though I have spent a lot of time with this dataset, I have had many opportunities to visualize it yet. For my final visualization project, I decided to work with one of the 14 corpora that I have been exploring, the <a href="https://childes.talkbank.org/access/Eng-NA/Kuczaj.html">Kuczaj Corpus</a>. The Kuczaj Corpus contains transcripts of spontaneous speech collected during a longitudinal case study conducted by Stan Kuczaj on his son, Abe. Kuczaj was studying the acquisition of certain verb inflections. The study took place from 1973-1975, when Abe was 28 months old to 60 months old.</p>
 </div>
 <div id="creating-the-visualization" class="section level1">
 <h1>Creating the Visualization</h1>
@@ -33,15 +33,14 @@ library(egg)</code></pre>
 kuczaj_raw &lt;- childesr::get_utterances(collection = &quot;Eng-NA&quot;,
                                        corpus = &quot;Kuczaj&quot;,
                                        role = &quot;Target_Child&quot;)</code></pre>
-<p>Before I could begin making my visualization, there was quite a bit of data organizing and data cleaning that had to be done first. I started by rearranging the raw dataframe, <code>kuczaj_raw</code>, and removed any columns that I would not be needing later on. Since unlike other corpora included in the CHILDES database, the Kuczaj Corpus only has one target child, a lot of the metadata about the text was unneeded and I only ended up using the <code>gloss</code> (the utterance) and <code>target_child_age</code> (age at time of utterance) columns.</p>
-<p>After reorganizing the columns, I made sure to filter out any missing utterances that there might be in the dataset.</p>
+<p>Before I could begin making my visualization, there was quite a bit of data organizing and data cleaning that had to be done first. I started by rearranging the raw dataframe, <code>kuczaj_raw</code>, and removed any columns that I would not be needing later on. Unlike other corpora included in the CHILDES database, the Kuczaj Corpus only has one target child. A lot of the metadata about the corpora and the texts was not needed because of this, and I only ended up keeping two columns: <code>gloss</code> (the utterance) and <code>target_child_age</code> (age at time of utterance in months). After reorganizing the columns, I made sure to filter out any missing utterances that there might be in the dataset.</p>
 <pre class="r"><code># Rearrange/renaming columns and removing missing utterances
 kuczaj &lt;- kuczaj_raw %&gt;% 
   select(utt = gloss, age_months = target_child_age) %&gt;% 
   drop_na(utt) %&gt;% 
   filter(utt != &quot;&quot;) </code></pre>
-<p>After the reorganization was finished, I began working on cleaning the data. I standarized all contractions that occured. Contractions were either expanded or collapsed, depending on whether they were an exception case or a general case. I made a subjective decision to remove all occurences of <code>'s</code>, since it’s grammatical meaning is ambiguous: it can either signify a possessive <code>'s</code> or a collapsed <code>is</code>.</p>
-<p>In addition to processing contractions, I removed all underscores (used to signify a phrase), and converted all characters to lowercase.</p>
+<p>Once the reorganization was finished, I began working on cleaning the data. I standarized all contractions that occured. Contractions were either expanded or collapsed, depending on whether they were an exception case or a general case. I made a subjective decision to remove all occurences of <code>'s</code>, since its grammatical meaning is ambiguous: it can either signify a possessive <code>'s</code> or a collapsed <code>is</code>.</p>
+<p>In addition to processing contractions, I also removed all underscores (used to signify a phrase), and converted all characters to lowercase.</p>
 <pre class="r"><code># Creating a function to process contractions
 
 proc_contractions &lt;- function(string) {
@@ -88,22 +87,23 @@ kuczaj$utt %&lt;&gt;%
   
   # Changing all characters to lowercase
   str_to_lower()</code></pre>
-<p>Since the age of a person is typically quantified and referred to in years instead of months, it makes sense to convert the unit that records age in the dataframe to years instead of months.</p>
+<p>Since the age of a person is typically quantified and referred to in years instead of months, I decided to convert the unit that records age in the dataframe to years instead of months.</p>
 <pre class="r"><code># Adding a column with age in years
 kuczaj %&lt;&gt;%
   mutate(age_years = age_months/12)</code></pre>
-<p>The next step is unnesting the utterances into tokens. For this visualization I chose to tokenizing the text into unigrams using the <code>unnest_tokens()</code> function from the <code>tidytext</code> package.</p>
+<p>Next, I unnested the utterances into tokens. For this visualization I chose to tokenizing the text into unigrams using the <code>unnest_tokens()</code> function from the <code>tidytext</code> package.</p>
 <pre class="r"><code># Tokenizing into unigrams
 tokens_raw &lt;- kuczaj %&gt;% 
   unnest_tokens(output = word, input = utt)</code></pre>
-<p>Since text data can be hard to visualize by itself, I chose to visualize the emotion in the text. I performed a sentiment analysis with the <code>&quot;nrc&quot;</code> sentiment lexicon included in the <code>tidytext</code> package. The <code>nrc</code> sentiment lexicon classifies words into 10 different sentiment categories: <code>anger</code>, <code>anticipation</code>, <code>disgust</code>, <code>fear</code>, <code>joy</code>, <code>negative</code>, <code>positive</code>, <code>sadness</code>, <code>surprise</code>, and <code>trust</code>.</p>
-<p>After initializing the lexicon, I combined it with the tokens using an <code>dplyr::inner_merge</code>. Only the tokens that occured in both dataframes were kept, while all other tokens were removed.</p>
+<p>Since text data can be difficult to visualize raw, especially if you have a lot of it, I chose to visualize the emotion in the text. I performed a sentiment analysis with the <code>&quot;nrc&quot;</code> sentiment lexicon included in the <code>tidytext</code> package. The <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Word-Emotion Association Lexicon</a> classifies words into 10 different sentiment categories: <code>anger</code>, <code>anticipation</code>, <code>disgust</code>, <code>fear</code>, <code>joy</code>, <code>negative</code>, <code>positive</code>, <code>sadness</code>, <code>surprise</code>, and <code>trust</code>.</p>
+<p>After initializing the lexicon, I combined it with the tokens using an <code>dplyr::inner_join</code>. Only the tokens that occured in both dataframes were kept, while all other tokens were removed.</p>
 <pre class="r"><code># Initizalizing &quot;nrc&quot; sentiment lexicon
 nrc &lt;- tidytext::get_sentiments(&quot;nrc&quot;)
 
 # Merging together tokens and nrc
 nrc_df &lt;- tokens_raw %&gt;% 
   inner_join(nrc, by = &quot;word&quot;)  </code></pre>
+<p>As is typical and potentially problematic of sentiment lexicons, a lot of words ended up being omitted. The total number of tokens changed from 167833 to 22893, with 144940 tokens lost.</p>
 <p>And finally, making the plot!</p>
 <p>I decided to restrict the sentiment categories from 10 to 6, and grouped these 6 into emotions that associated with a positive sentiment – <code>joy</code>, <code>trust</code>, and <code>anticipation</code> – and emotions that are associated with a negative sentiment – <code>anger</code>, <code>sadness</code>, and <code>fear</code>. The creation of these groupings was mostly a subjective decision that was partially motivated from exploring the most common sets of emotions as illustrated on the <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Word-Emotion Association Lexicon</a></p>
 <p>To make the actual ridgeline plot, I used the <code>geom_density_ridges()</code> extension to <code>ggplot()</code>, provided in the <code>ggridges</code> package. I created the ridgeline plot of the positive and negative sentiment groups separately, and then combined them together using the <code>ggarrange()</code> function from the <code>egg</code> package.</p>
@@ -149,7 +149,7 @@ As for as potential audiences in a more general sense, this might include studen
 </div>
 <div id="description-of-the-graph-type" class="section level1">
 <h1>Description of the Graph Type</h1>
-<p>A ridgeline plot visualizes the distribution of various groups, either as density plots or histograms, with the individual plots staggered vertically on a common x-axis, and layered slightly overlapping each other. They are typically used to visualize how the aspects of a categorical variable change over time or space.</p>
+<p>A ridgeline plot visualizes the distribution of various groups, either as density plots or histograms, with the individual plots staggered vertically on a common x-axis and slightly overlapping each other. They are typically used to visualize how the aspects of a categorical variable change over time or space.</p>
 </div>
 <div id="representation-description" class="section level1">
 <h1>Representation Description</h1>
@@ -172,7 +172,7 @@ As for as potential audiences in a more general sense, this might include studen
 </div>
 <div id="an-early-draft" class="section level1">
 <h1>An Early Draft</h1>
-<p>Here is an early draft of my visualization. This version of the plot came before the sentiments were grouped into “positive” and “negative” and before I altered the general plot composition and colors. I had already chosen to reduce the total number of sentiments, but had only reduced it down to 8 for this plot.</p>
+<p>This is an early draft plot that came before the sentiments were grouped into “positive” and “negative” and before I altered the general plot composition and colors. I had already chosen to reduce the total number of sentiments, but had only reduced it down to 8 for this plot. I decided to separate the sentiments into <em>positive</em> and <em>negative</em> groups and realizing that having them all on the same plot made it difficult to understand what was the plot was showing at a first glance.</p>
 <pre class="r"><code># Loading package for colors
 library(beyonce)
 
